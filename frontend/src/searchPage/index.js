@@ -26,9 +26,13 @@ function SearchPage() {
   }, [data])
 
   async function search() {
-    const res = await api.get(`/v1/search?query=${value}&count=10`)
+    try {
+      const res = await api.get(`/v1/search?query=${value}&count=10`)
 
-    setData(res.data)
+      setData(res.data)
+    } catch(e) {      
+      alert('Não foi possível enviar a requisição, verifique as credenciais da API e tente novamente')
+    }
   }
 
   async function searchNext() {
@@ -43,10 +47,32 @@ function SearchPage() {
     const res = await api.get(`/v1/search?query=${value}&count=10&current=${prev}`)
 
     setData(res.data)
-  }  
+  }
+
+  function getItems() {
+    const items = (data.data || [])
+    if (items.length > 0) {
+      return items.map(tweet => (
+        <tr key={tweet.id}>
+          <td><img src={ tweet.user.imageUrl } alt={ tweet.user.name }/></td>
+          <td>{ tweet.user.name }</td>
+          <td>{ tweet.user.location }</td>
+          <td>{ tweet.created_at }</td>
+          <td>{ tweet.text }</td>
+        </tr>
+        )
+      )
+    } else {
+      return (
+        <tr>
+          <td colSpan="5" className="empty-result">Nenhum resultado encontrado</td>
+        </tr>
+      )
+    }    
+  }
   
   return (
-    <div className="container-2">
+    <div className="app-container">
       <h3>Twitter Search</h3>
 
       <div className="form-row align-items-center">
@@ -83,15 +109,7 @@ function SearchPage() {
           </tr>
         </thead>
         <tbody>
-          {(data.data || []).map(tweet => (
-          <tr key={tweet.id}>
-            <td><img src={ tweet.user.imageUrl } alt={ tweet.user.name }/></td>
-            <td>{ tweet.user.name }</td>
-            <td>{ tweet.user.location }</td>
-            <td>{ tweet.created_at }</td>
-            <td>{ tweet.text }</td>
-          </tr>
-          ))}
+          {getItems()}
         </tbody>
       </table>
     </div>    
