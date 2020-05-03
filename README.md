@@ -1,3 +1,5 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/66ca3288a5f512d97986/maintainability)](https://codeclimate.com/github/AmaralMarti/twittersearch/maintainability)
+
 ## Twitter Search
 
 ### Como rodar
