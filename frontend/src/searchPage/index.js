@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
+import { writeStorage, deleteFromStorage, useLocalStorage } from '@rehooks/local-storage'
 import { FaSearch, FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import './style.css'
 import api from '../api'
 
 function SearchPage() {
 
-  const [ value, setValue ] = useState('')
-  const [ data, setData ] = useState({})
+  const [ value, setValue ] = useLocalStorage('value')
+  const [ data, setData ] = useLocalStorage('data', {})
 
-  const [ prevDisabled, setPrevDisabled ] = useState('')
-  const [ nextDisabled, setNextDisabled ] = useState('')
+  const [ prevDisabled, setPrevDisabled ] = useLocalStorage('prevDisabled')
+  const [ nextDisabled, setNextDisabled ] = useLocalStorage('nextDisabled')
 
-  useEffect(() => {
+   useEffect(() => {
     if ((data.metadata || {}).prev) {
       setPrevDisabled('')      
     } else {
@@ -80,6 +81,7 @@ function SearchPage() {
           <input
             className="form-control mb-2" 
             placeholder="Termo para busca"
+            value={value}
             onChange={e => setValue(e.target.value)}
             onKeyPress={e=> { if (e.key === 'Enter') search() }}
           />
